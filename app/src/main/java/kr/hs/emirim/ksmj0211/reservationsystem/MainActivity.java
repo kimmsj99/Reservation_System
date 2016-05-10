@@ -1,5 +1,7 @@
 package kr.hs.emirim.ksmj0211.reservationsystem;
 
+import android.graphics.Color;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import org.w3c.dom.Text;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     Chronometer chrono;
@@ -36,18 +40,45 @@ public class MainActivity extends AppCompatActivity {
         timePick.setVisibility(View.INVISIBLE); //INVISIBLE은 화면에 안 보이게 함
         calView.setVisibility(View.INVISIBLE);
 
-        radioDate.setOnClickListener(new View.OnClickListener() {
+            radioDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calView.setVisibility(View.VISIBLE);
                 timePick.setVisibility(View.INVISIBLE);
             }
         });
+
         radioTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calView.setVisibility(View.INVISIBLE);
                 timePick.setVisibility(View.VISIBLE);
+            }
+        });
+
+        butStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chrono.setBase(SystemClock.elapsedRealtime());
+                chrono.start();
+                chrono.setTextColor(Color.RED);
+            }
+        });
+
+        butDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chrono.stop();
+                chrono.setTextColor(Color.BLUE);
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(calView.getDate());
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH)+1;
+                int date = cal.get(Calendar.DATE);
+//                int hour = timePick.getHour();
+//                int minute = timePick.getMinute();
+                String dateAndtime = year + "년 " + month + "월 " + date + "일";
+                textResult.setText(dateAndtime);
             }
         });
     }
